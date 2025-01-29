@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -15,18 +16,22 @@ namespace MainMenu
 {
     public partial class Form0 : Form
     {
+        private readonly Image musicOnImage;
+        private readonly Image musicOffImage;
+
         public Form0()
         {
             InitializeComponent();
 
+            musicOnImage = LoadImage("sound_on.png");
+            musicOffImage = LoadImage("sound_off.png");
 
-            pictureBoxMusicToggle.Image = musicOnImage;
+            UpdateMusicIcon();
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            Sound.StopClickSound();
-            Sound.PlayClickSound();
+            PlayClickSound();
             Form1 form1 = new Form1();
             form1.FormClosed += (s, args) => this.Close();
             form1.Show();
@@ -43,25 +48,36 @@ namespace MainMenu
             Sound.PlayMenuTheme();
         }
 
-        private Image musicOnImage = Image.FromFile("E:\\univer\\vs\\Курсовий проект 1\\Maze Game\\MainMenu\\Resources\\sound_on.png");
-        private Image musicOffImage = Image.FromFile("E:\\univer\\vs\\Курсовий проект 1\\Maze Game\\MainMenu\\Resources\\sound_off.png");
-
         private void pictureBoxMusicToggle_Click(object sender, EventArgs e)
+        {
+            PlayClickSound();
+            Sound.ToggleMusic();
+            UpdateMusicIcon();
+        }
+
+        private void PlayClickSound()
         {
             Sound.StopClickSound();
             Sound.PlayClickSound();
+        }
 
-            Sound.ToggleMusic();
+        private void UpdateMusicIcon()
+        {
+            pictureBoxMusicToggle.Image = Sound.IsMusicEnabled ? musicOnImage : musicOffImage;
+        }
 
-            if (Sound.IsMusicEnabled)
+        private Image LoadImage(string fileName)
+        {
+            try
             {
-                pictureBoxMusicToggle.Image = musicOnImage;
+                string path = Path.Combine(Application.StartupPath, "Resources", fileName);
+                return File.Exists(path) ? Image.FromFile(path) : null;
             }
-            else
+            catch (Exception ex)
             {
-                pictureBoxMusicToggle.Image = musicOffImage;
+                MessageBox.Show($"Error loading image {fileName}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
-
         }
     }
 }

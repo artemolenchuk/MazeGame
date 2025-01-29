@@ -10,36 +10,40 @@ namespace GameClassLibrary
 {
     public class Player : GameObject
     {
-        public Player(int x, int y, int speed, System.Drawing.Image image) : base(x, y, image.Width, image.Height, image)
+        public int Speed { get; private set; }
+        public Direction Direction { get; private set; }
+
+        public Player(int x, int y, int speed, System.Drawing.Image image)
+            : base(x, y, image.Width, image.Height, image)
         {
             Speed = speed;
         }
 
-        public int Speed { get; set; }
-        public Direction Direction { get; set; }
-
-        public void MoveLeft()
+        public void Move(Direction direction)
         {
-            X -= Speed;
-            Direction = Direction.Left;
-        }
+            Direction = direction;
 
-        public void MoveRight()
-        {
-            X += Speed;
-            Direction = Direction.Right;
-        }
+            int dx = 0;
+            int dy = 0;
 
-        public void MoveUp()
-        {
-            Y -= Speed;
-            Direction = Direction.Up;
-        }
+            switch (direction)
+            {
+                case Direction.Left:
+                    dx = -Speed;
+                    break;
+                case Direction.Right:
+                    dx = Speed;
+                    break;
+                case Direction.Up:
+                    dy = -Speed;
+                    break;
+                case Direction.Down:
+                    dy = Speed;
+                    break;
+            }
 
-        public void MoveDown()
-        {
-            Y += Speed;
-            Direction = Direction.Down;
+            X += dx;
+            Y += dy;
         }
     }
 }

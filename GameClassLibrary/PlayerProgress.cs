@@ -9,14 +9,15 @@ namespace GameClassLibrary
 {
     public class PlayerProgress
     {
-        private const string ProgressFilePath = ("E:\\univer\\vs\\Курсовий проект 1\\Maze Game\\player_progress.txt");
-
+        private const int InitialLevel = 1;
+        private readonly string progressFilePath;
 
         public int UnlockedLevels { get; private set; }
 
         public PlayerProgress()
         {
-            UnlockedLevels = 1;
+            progressFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "player_progress.txt");
+            UnlockedLevels = InitialLevel;
             LoadProgress();
         }
 
@@ -31,24 +32,38 @@ namespace GameClassLibrary
 
         private void SaveProgress()
         {
-            File.WriteAllText(ProgressFilePath, UnlockedLevels.ToString());
+            try
+            {
+                File.WriteAllText(progressFilePath, UnlockedLevels.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving progress: {ex.Message}");
+            }
         }
 
         private void LoadProgress()
         {
-            if (File.Exists(ProgressFilePath))
+            try
             {
-                string content = File.ReadAllText(ProgressFilePath);
-                if (int.TryParse(content, out int unlockedLevels))
+                if (File.Exists(progressFilePath))
                 {
-                    UnlockedLevels = unlockedLevels;
+                    string content = File.ReadAllText(progressFilePath);
+                    if (int.TryParse(content, out int unlockedLevels))
+                    {
+                        UnlockedLevels = unlockedLevels;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading progress: {ex.Message}");
             }
         }
 
         public void ResetProgress()
         {
-            UnlockedLevels = 1;
+            UnlockedLevels = InitialLevel;
             SaveProgress();
         }
     }

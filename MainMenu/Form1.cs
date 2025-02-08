@@ -53,38 +53,34 @@ namespace MainMenu
             this.Hide();
         }
 
-        private void pictureBoxLevelOne_Click(object sender, EventArgs e)
+        private void OpenLevel(int level)
         {
+            if (level > playerProgress.UnlockedLevels) return; 
+
             Form2 form2 = new Form2();
+
+            switch (level)
+            {
+                case 2:
+                    form2.InitializeLevel2();
+                    break;
+                case 3:
+                    form2.InitializeLevel3();
+                    break;
+            }
+
             form2.FormClosed += (s, args) => this.Close();
             form2.Show();
             this.Hide();
         }
 
-        private void pictureBoxLevelTwo_Click(object sender, EventArgs e)
+        private void pictureBoxLevelOne_Click(object sender, EventArgs e) => OpenLevel(1);
+        private void pictureBoxLevelTwo_Click(object sender, EventArgs e) => OpenLevel(2);
+        private void pictureBoxLevelThree_Click(object sender, EventArgs e) => OpenLevel(3);
+
+        private void Form1_Load(object sender, EventArgs e)
         {
-            if (playerProgress.UnlockedLevels >= 2)
-            {
-                Form2 form2 = new Form2();
-                form2.InitializeLevel2();
-                form2.FormClosed += (s, args) => this.Close();
-                form2.Show();
-                this.Hide();
-            }
+
         }
-
-        private void pictureBoxLevelThree_Click(object sender, EventArgs e)
-        {
-            if (playerProgress.UnlockedLevels >= 3)
-            {
-                Form2 form2 = new Form2();
-                form2.InitializeLevel3();
-                form2.FormClosed += (s, args) => this.Close();
-                form2.Show();
-                this.Hide();
-            }
-        }
-
-
     }
 }

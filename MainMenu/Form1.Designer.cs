@@ -124,6 +124,7 @@
             this.Name = "Form1";
             this.Text = "Лабіринт";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLevelOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLevelTwo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLevelThree)).EndInit();
